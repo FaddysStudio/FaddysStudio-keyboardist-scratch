@@ -1,0 +1,28 @@
+opcode o_text, S, 0
+
+SFile sprintf "keyboardist-%d.txt", date:i ()
+
+SNano sprintf "nano %s", SFile
+iCode system_i 1, SNano
+
+SText = ""
+
+if iCode == 0 then
+
+SText, i_ readfi SFile
+
+iLength strlen SText
+if iLength > 1 then
+
+SText strsub SText, 0, iLength - 1
+
+endif
+
+endif
+
+SRemove sprintf "rm %s", SFile
+i_ system_i 1, SRemove
+
+xout SText
+
+endop

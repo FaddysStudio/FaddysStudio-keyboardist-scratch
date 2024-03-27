@@ -1,0 +1,21 @@
+o_install "note/insert"
+
+instr note
+
+iPlayer nstrnum "player"
+iInstance = frac ( p1 )
+iInstrument = iPlayer + iInstance
+
+SFile o_get_S "file"
+iBar o_get_i "bar"
+iBeat o_get_i "beat"
+
+kClock chnget "clock"
+
+if kClock == iBar then
+
+schedulek iInstrument, iBeat, 0
+
+endif
+
+endin

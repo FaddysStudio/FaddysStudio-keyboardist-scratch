@@ -1,0 +1,12 @@
+#include "process.part"
+#include "field.part"
+#include "keyboard.part"
+#include "clock.part"
+#include "note.part"
+#include "save.part"
+#include "player.part"
+#include "recorder.part"
+
+chnset "dom.wav", "sample"
+
+o_process "start"

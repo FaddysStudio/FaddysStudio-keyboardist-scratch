@@ -1,0 +1,16 @@
+instr recorder
+
+iIndex = 4
+
+aLeft, aRight inch p ( iIndex ), p ( iIndex + 1 )
+
+iIndex += 2
+
+SPrefix strget p ( iIndex )
+iSeconds date
+
+SFile sprintf "%s-%d.wav", SPrefix, iSeconds
+
+fout SFile, -1, aLeft, aRight
+
+endin

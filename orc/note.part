@@ -1,0 +1,55 @@
+#include "note/insert.part"
+
+instr note
+
+iInstance = frac ( p1 )
+SInstance sprintf "%f", iInstance
+iIndex chnget SInstance
+
+iPlayer nstrnum "player"
+iInstrument = iPlayer + iInstance
+
+kBar o_get_k "bar"
+kClock chnget "clock"
+kTick chnget "clock/tick"
+
+if kTick == 1 && kClock == kBar then
+
+kBeat o_get_k "beat"
+
+schedulek iInstrument, kBeat, 0
+
+printf "#note .%d\n", date:k (), iIndex
+
+endif
+
+kSave chnget "save"
+kPrinted init 0
+
+if kSave > 0 && kPrinted == 0 then
+
+SFile chnget "save/file"
+
+SSample o_get_S "sample"
+kBar o_get_k "bar"
+kBeat o_get_k "beat"
+kDivisions o_get_k "divisions"
+
+SNote sprintfk {{i "note_insert" 0 0 1 "%s" %d %d %d
+}}, SSample, kBar, kBeat, kDivisions
+
+fprintks SFile, SNote
+
+kPrinted = 1
+
+chnset kSave - 1, "save"
+
+printf SNote, date:k ()
+
+elseif kSave == 0 then
+
+kPrinted = 0
+
+endif
+
+endin

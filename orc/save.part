@@ -1,0 +1,15 @@
+chnset "save", "action/."
+
+instr save
+
+SProject chnget "project"
+SFile sprintf "%s_%d.wav", SProject, date:i ()
+chnset SFile, "save/file"
+
+iCount chnget "count"
+chnset iCount, "save"
+
+endin
+
+;SProject o_text
+;chnset SProject, "project"

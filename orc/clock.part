@@ -1,0 +1,77 @@
+instr clock
+
+subinstrinit "clock_measure"
+subinstrinit "clock_tempo"
+subinstrinit "clock_frequency"
+subinstrinit "clock_cycle"
+
+kFrequency chnget "clock/frequency"
+
+kTick metro kFrequency
+
+chnset kTick, "clock/tick"
+
+if kTick == 1 then
+
+kClock chnget "clock"
+kCycle chnget "clock/cycle"
+
+kClock += 1
+kClock = kClock % kCycle
+
+chnset kClock, "clock"
+
+printf "#clock %d\n", date:k (), kClock
+
+endif
+
+endin
+
+schedule "clock", 0, -1
+
+instr clock_tempo
+
+if p5 <= 0 then
+
+p5 = 60
+
+endif
+
+chnset p5, "clock/tempo"
+
+subinstrinit "clock_frequency"
+
+endin
+
+instr clock_measure
+
+if p4 <= 0 then
+
+p4 = 4
+
+endif
+
+chnset p4, "clock/measure"
+
+endin
+
+instr clock_frequency
+
+iTempo chnget "clock/tempo"
+iMeasure chnget "clock/measure"
+
+chnset iTempo / 60 / iMeasure, "clock/frequency"
+
+endin
+
+instr clock_cycle
+
+if p4 <= 0 then
+
+p4 = 1
+
+endif
+
+chnset p4, "clock/cycle"
+
+endin

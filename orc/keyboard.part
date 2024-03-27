@@ -1,0 +1,24 @@
+instr keyboard
+
+kASCII, kPressed sense
+
+if kPressed == 1 then
+
+SAction sprintfk "action/%c", kASCII
+SInstrument chnget SAction
+
+kLength strlenk SInstrument
+
+if kLength > 0 then
+
+SScore sprintfk {{ i "%s" 0 0 }}, SInstrument
+
+scoreline SScore, 1
+
+endif
+
+endif
+
+endin
+
+schedule "keyboard", 0, -1

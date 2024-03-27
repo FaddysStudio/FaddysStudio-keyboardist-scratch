@@ -1,0 +1,39 @@
+opcode o_process, 0, S
+
+SArgs xin
+
+SFile sprintf ".k_%d.response", date:i ()
+
+SCommand sprintf "./index.js %s %s", SFile, SArgs
+iCode system_i 1, SCommand
+
+SResponse = ""
+
+if iCode == 0 then
+
+SResponse = ""
+iLine = 0
+
+while iLine >= 0 do
+
+SLine, iLine readfi SFile
+
+SPrevious = SResponse
+SResponse sprintf "%s\n%s", SPrevious, SLine
+
+od
+
+iLength strlen SResponse
+
+if iLength > 0 then
+
+i_ readscore SResponse
+
+endif
+
+endif
+
+SRemove sprintf "rm %s", SFile
+i_ system_i 1, SRemove
+
+endop

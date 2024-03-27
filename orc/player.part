@@ -1,0 +1,14 @@
+instr player
+
+SSample o_get_S "sample"
+
+prints "#player %s\n", SSample
+
+iDuration filelen SSample
+p3 = iDuration
+
+aLeft, aRight diskin2 SSample
+
+outs aLeft, aRight
+
+endin

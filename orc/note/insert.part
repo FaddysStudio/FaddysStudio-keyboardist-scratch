@@ -1,0 +1,63 @@
+chnset "note_insert", "action/\n"
+
+instr note_insert
+
+iIndex chnget "index"
+
+iIndex += 1
+
+if iIndex % 10 == 0 then
+
+iIndex += 1
+
+endif
+
+chnset iIndex, "index"
+
+SInstance sprintf "0.%d", iIndex
+iInstance strtod SInstance
+SInstance sprintf "%f", iInstance
+
+chnset iIndex, SInstance
+
+p1 = int ( p1 ) + iInstance
+
+iCount chnget "count"
+chnset iCount + 1, "count"
+
+iField = 4
+
+if p ( iField ) == 0 then
+
+SSample chnget "sample"
+iBar chnget "bar"
+iBeat chnget "beat"
+iDivisions chnget "divisions"
+
+else
+
+iField += 1
+
+SSample strget p ( iField )
+iBar = p ( iField + 1 )
+iBeat = p ( iField + 2 )
+iDivisions = p ( iField + 3 )
+
+endif
+
+o_set_S "sample", SSample
+o_set_i "bar", iBar
+o_set_i "beat", iBeat
+o_set_i "divisions", iDivisions
+
+iNote nstrnum "note"
+
+schedule iNote + iInstance, 0, -1
+
+prints {{#note/insert
+.index %d
+.sample %s
+.bar %d
+}}, iIndex, SSample, iBar
+
+endin
