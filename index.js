@@ -3,8 +3,8 @@
 import Scenarist from '@faddys/scenarist';
 import { argv, cwd } from 'node:process';
 import { readdir, mkdir } from 'node:fs/promises';
-import $sequence from '@faddys/keyboardist/sequence';
-import { scenario as $sample } from '@faddys/keyboardist/sample';
+import { scenario as $sequence } from '@faddys/keyboardist/sequence';
+import { scenario as $kit } from '@faddys/keyboardist/kit';
 
 const $$ = Symbol .for;
 
@@ -41,7 +41,7 @@ return $ ( $$ ( 'info' ), "Project has been initialized successfully" );
 },
 
 $sequence,
-$sample,
+$kit,
 
 $_info ( $, ... message ) { console .log ( "#keyboardist", "#info", ... message ) }
 
