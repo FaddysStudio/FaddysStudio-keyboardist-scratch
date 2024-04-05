@@ -23,6 +23,8 @@ printf "#note .%d\n", date:k (), iIndex
 
 endif
 
+/*
+
 kSave chnget "save"
 kPrinted init 0
 
@@ -38,7 +40,7 @@ kDivisions o_get_k "divisions"
 SNote sprintfk {{i "note_insert" 0 0 1 "%s" %d %d %d
 }}, SSample, kBar, kBeat, kDivisions
 
-fprintks SFile, SNote
+;fprintks SFile, SNote
 
 kPrinted = 1
 
@@ -51,5 +53,7 @@ elseif kSave == 0 then
 kPrinted = 0
 
 endif
+
+*/
 
 endin

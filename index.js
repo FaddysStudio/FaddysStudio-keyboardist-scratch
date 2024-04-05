@@ -1,56 +1,48 @@
 #!/usr/bin/env node
 
 import Scenarist from '@faddys/scenarist';
-import { createInterface, emitKeypressEvents } from 'node:readline';
-import { stdin as input, stdout as output } from 'node:process';
-import { writeFile } from 'node:fs/promises';
+import { argv, cwd } from 'node:process';
+import { readdir, mkdir } from 'node:fs/promises';
+import $sequence from '@faddys/keyboardist/sequence';
+import $sample from '@faddys/keyboardist/sample';
 
 const $$ = Symbol .for;
 
 await Scenarist ( {
 
-$_producer ( $ ) {
+async $_producer ( $ ) {
 
-const args = process .argv .slice ( 2 );
+try {
 
-if ( ! args .length )
-$ ( $$ ( 'display' ) );
+await $ ( ... argv .slice ( 2 ) );
 
-else
-$ ( $$ ( 'process' ), ... args );
+} catch ( error ) {
 
-},
-
-$_display ( $ ) {
-
-createInterface ( { input, output, prompt: '' } )
-.on ( 'line', async line => await $ ( ... line .trim () .split ( /\s+/ ) ) )
-.on ( 'error', error => console .error ( error .message ) )
-.on ( 'close', () => console .log ( "la howlla wala quowa ela belah" ) );
-
-},
-
-$_process ( $, response, ... prompt ) {
-
-createInterface ( {
-
-input, output,
-prompt: prompt .join ( ' ' ) + ': '
-
-} )
-.once (
-
-'line',
-async function handle ( line ) {
-
-await writeFile ( response || `k-response_${ Date .now () }`, line, 'utf8' );
-
-this .close ();
+console .error ( '#keyboardist', '#error', error .message );
 
 }
 
-) .prompt ();
+},
 
-}
+async $init ( $ ) {
+
+const contents = await readdir ( cwd (), { withFileTypes: true } );
+const names = contents .map ( ( { name } ) => name );
+const index = names .indexOf ( '.keyboardist' );
+const initialized = index < 0 ? false : contents [ index ] .isDirectory ();
+
+if ( initialized )
+return $ ( $$ ( 'info' ), "Project has already been initialized" ); 
+
+await mkdir ( cwd () + '/.keyboardist' );
+
+return $ ( $$ ( 'info' ), "Project has been initialized successfully" );
+
+},
+
+$sequence,
+$sample,
+
+$_info ( $, ... message ) { console .log ( "#keyboardist", "#info", ... message ) }
 
 } );

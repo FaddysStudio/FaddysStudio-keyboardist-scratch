@@ -9,4 +9,21 @@
 
 chnset "dom.wav", "sample"
 
-o_process "start"
+#ifdef working_directory
+
+SWorkingDirectory = "$working_directory"
+SEngineDirectory pwd
+
+#else
+
+SWorkingDirectory pwd
+SEngineDirectory = SWorkingDirectory
+
+#end
+
+chnset SEngineDirectory, "directory/engine"
+chnset SWorkingDirectory, "directory/work"
+
+SChangeDirectory sprintf "cd %s; pwd", SWorkingDirectory
+
+i_ system_i 1, SChangeDirectory

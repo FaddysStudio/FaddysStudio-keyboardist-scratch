@@ -3,7 +3,9 @@ import { spawn} from 'node:child_process';
 import { createInterface, Interface } from 'node:readline';
 import { stdin as input, stdout as output } from 'node:process';
 
-export default await Scenarist ( {
+export default async ( ... command ) => ( ( await $ ( ... command ) ) .resolution );
+
+const $ = await Scenarist ( {
 
 $_producer ( $ ) {
 
@@ -20,65 +22,61 @@ return $ ( ... line );
 (
 
 this .interface = createInterface ( { input, output } )
-.on ( 'line', line => $ ( ... line .trim () .split ( /\s+/ ) ) )
+.on ( 'line', line => $ ( line ) )
 .on ( 'error', error => console .error ( error .message ) )
 
 ) .prompt ();
 
+for ( const signal of [ 'SIGINT' ] )
+process .on ( signal, () => this .command .kill ( signal ) );
+
 },
 
-async $_director ( $, ... line ) {
+$_director ( $, ... line ) {
 
-const command = await new Promise ( async ( resolution, rejection ) => {
+return new Promise ( async ( resolution, rejection ) => {
 
-this .command = spawn( 'bash', [ '-c', ... line ] )
-.on ( 'error', error => rejection ( 'Bad command' ) );
+this .command = spawn( 'bash', [ '-c', line .join ( ' ' ), "Faddy's Command" ] )
+.on ( 'error', error => rejection ( 'Bad command' ) )
+.on ( 'spawn', () => this .read () )
+.on ( 'exit', async () => {
 
-resolution ( await this .read () );
+resolution ( this .command );
+
+if ( this .interface )
+this .interface .prompt ();
 
 } );
 
-if ( this .interactive )
-this .print ();
-
-if ( typeof this ?.interface ?.prompt === 'function' )
-this .interface .prompt ();
+} );
 
 },
 
-async read () {
+read () {
 
 const { command } = this;
 command .output = [];
 command .error = [];
 
-for await ( const line of createInterface ( { input: command .stdout } ) )
+createInterface ( { input: command .stdout } )
+.on ( 'line', line => {
+
 command .output .push ( line );
 
-for await ( const line of createInterface ( { input: command .stderr } ) )
+if ( this .interactive )
+console .log ( line );
+
+} );
+
+createInterface ( { input: command .stderr } )
+.on ( 'line', line => {
+
 command .error .push ( line );
 
-return this .command;
+if ( this .interactive )
+console .error ( line );
 
-},
-
-print () {
-
-const { command } = this;
-
-if ( command .output .length ) {
-
-console .log ( `#output ${ command .output .length } line${ command .output .length === 1 ? '' : 's' }` );
-command .output .forEach ( line => console .log ( line ) );
-
-}
-
-if ( command .error .length ) {
-
-console .error ( `#error ${ command .error .length } line${ command .error .length === 1 ? '' : 's' }` );
-command .error .forEach ( line => console .error ( line ) );
-
-}
+} );
 
 }
 

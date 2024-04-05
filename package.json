@@ -3,8 +3,17 @@
   "version": "1.0.0",
   "description": "Faddy's Keyboardist",
   "type": "module",
-  "main": "index.js",
-  "bin": "./index.sh",
+  "exports": {
+    ".": "./index.js",
+    "./command": "./command.js",
+    "./sequence": "./sequence/index.js",
+    "./sample": "./sample/index.js"
+  },
+  "bin": {
+    "keyboardist": "./index.js",
+    "k": "./index.js",
+    "keyboardist-directory": "./directory.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FaddysStudio/keyboardist.git"

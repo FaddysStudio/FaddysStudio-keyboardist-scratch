@@ -31,13 +31,13 @@ schedule "clock", 0, -1
 
 instr clock_tempo
 
-if p5 <= 0 then
+if p4 <= 0 then
 
-p5 = 60
+p4 = 60
 
 endif
 
-chnset p5, "clock/tempo"
+chnset p4, "clock/tempo"
 
 subinstrinit "clock_frequency"
 
@@ -52,6 +52,8 @@ p4 = 4
 endif
 
 chnset p4, "clock/measure"
+
+subinstrinit "clock_frequency"
 
 endin
 

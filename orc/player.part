@@ -4,6 +4,10 @@ SSample o_get_S "sample"
 
 prints "#player %s\n", SSample
 
+SCWD pwd
+SWorkingDirectory chnget "directory/work"
+prints "%s\n%s\n", SCWD, SWorkingDirectory
+
 iDuration filelen SSample
 p3 = iDuration
 
