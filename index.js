@@ -4,7 +4,7 @@ import Scenarist from '@faddys/scenarist';
 import { argv, cwd } from 'node:process';
 import { readdir, mkdir } from 'node:fs/promises';
 import $sequence from '@faddys/keyboardist/sequence';
-import $sample from '@faddys/keyboardist/sample';
+import { scenario as $sample } from '@faddys/keyboardist/sample';
 
 const $$ = Symbol .for;
 

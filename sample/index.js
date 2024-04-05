@@ -1,11 +1,13 @@
+import Scenarist from '@faddys/scenarist';
 import command from '@faddys/keyboardist/command';
 import { parse } from 'node:path';
 
-export default {
+export const scenario = {
 
-$_producer () {
+$_producer ( $ ) {
 
-command ( 'mkdir -p ~/.keyboardist/bank' );
+if ( process .argv [ 1 ] === new URL ( import .meta .url ) .pathname )
+return $ ( ... process .argv .slice ( 2 ) );
 
 },
 
@@ -28,3 +30,5 @@ await command ( `aplay ${ link }` );
 }
 
 };
+
+export const $ = await Scenarist ( scenario );
