@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@faddys/command": "^1.0.0",
+    "@faddys/scenarist": "^1.0.0"
+  },
+  "name": "@faddys/sequencer",
+  "version": "1.0.0",
+  "description": "Faddy's Sequencer",
+  "type": "module",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FaddysStudio/sequencer.git"
+  },
+  "author": "Faddy Michel <faddy.michel@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FaddysStudio/sequencer/issues"
+  },
+  "homepage": "https://github.com/FaddysStudio/sequencer#readme"
+}

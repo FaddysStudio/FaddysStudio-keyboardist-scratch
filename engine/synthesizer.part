@@ -1,0 +1,29 @@
+instr synthesizer
+
+iNote = p4
+iFrequency = cpsmidinn ( iNote )
+
+aFrequency init iFrequency
+aClip jspline 1, 0, 4
+aSkew jspline 1, 0, 4
+
+aNote squinewave aFrequency, aClip, aSkew, 0
+
+aFilter jspline aFrequency, 0, 4
+
+aNote tone aNote, aFrequency
+
+aAmplitude jspline .5, 0, 4
+aAmplitude += .5
+
+aEnvelope linseg 0, 1/1024, 1, p3 - 1/1024, 0
+aAmplitude *= aEnvelope
+
+aNote clip aNote, 1, 1
+
+aNote *= aAmplitude * p5 / 127
+
+chnmix aNote, "left"
+chnmix aNote, "right"
+
+endin

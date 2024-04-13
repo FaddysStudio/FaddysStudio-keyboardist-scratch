@@ -1,0 +1,17 @@
+instr parameter
+
+SName strget p4
+SValue strget p5
+iValue strlen SValue
+
+if iValue > 0 then
+
+chnset SValue, SName
+
+else
+
+chnset p5, SName
+
+endif
+
+endin

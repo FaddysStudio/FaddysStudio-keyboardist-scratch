@@ -1,0 +1,15 @@
+instr keyboard
+
+kASCII, kPressed sense
+
+if kPressed == 1 then
+
+SScore sprintfk {{ i "processor" 0 0 %d }}, kASCII
+
+scoreline SScore, 1
+
+endif
+
+endin
+
+schedule "keyboard", 0, -1
