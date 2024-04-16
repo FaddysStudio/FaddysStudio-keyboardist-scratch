@@ -29,6 +29,17 @@ staff .unshift ();
 
 }
 
+for ( let index = 0; index < staff .length; index++ )
+Object .assign ( staff, {
+
+get [ '$' + index ] () {
+
+return [ 1, 2 ] .map ( channel => `i ${ channel } 0 1 ${ staff [ index ] } 120` ) .join ( '\n' );
+
+}
+
+} );
+
 }
 
 push () {

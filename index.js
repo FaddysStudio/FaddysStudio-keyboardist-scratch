@@ -1,11 +1,14 @@
 import Scenarist from '@faddys/scenarist';
 import command from '@faddys/command';
-import Keyboard from './keyboard.js';
+import maqam from './faddys.js';
+import Staff from './staff.js';
 
 import { createInterface, emitKeypressEvents } from 'node:readline';
 import { stdin as input, stdout as output } from 'node:process';
 
-export default await Scenarist ( new class Sequencer extends Keyboard {
+const $$ = Symbol .for;
+
+export default await Scenarist ( new class Sequencer {
 
 $_producer ( $ ) {
 
@@ -13,32 +16,33 @@ input .setRawMode ( true );
 
 emitKeypressEvents ( input );
 
-this .processor = $;
-
-input .on ( 'keypress', async ( _, { sequence } ) => {
-
-try {
-
-const { resolution } = await this .processor ( sequence );
-
-console .log ( resolution );
-
-} catch ( _ ) {}
-
-} );
+input .on ( 'keypress', ( _, { sequence } ) => $ ( $$ ( 'processor' ), sequence ) );
 
 process .on ( 'exit', code => console .log ( '#exit', code ) );
 
 }
 
-$_director ( $, key ) {
+async $_processor ( $, sequence ) {
 
-if ( isNaN ( key = parseInt ( key ) ) || key < 1 || key > 9 )
-throw -1;
+try {
 
-return 'i "synthesizer" 0 1 ${ this .staff [ key ] } 100';
+const { resolution } = await $ ( sequence );
+
+console .log ( resolution );
+
+} catch ( _ ) {}
 
 }
+
+[ '$\x03' ] () {
+
+input .destroy ();
+
+return 'Yallah, bye bye!';
+
+}
+
+$_director = new Staff ( { maqam } )
 
 clef = {
 
@@ -48,7 +52,5 @@ tenor: [ 'D', 3 ],
 bass: [ 'G', 2 ]
 
 }
-
-$q () { process .exit () }
 
 } );

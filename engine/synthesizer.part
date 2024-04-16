@@ -1,4 +1,4 @@
-instr synthesizer
+instr 1, 2
 
 iNote = p4
 iFrequency = cpsmidinn ( iNote )
@@ -22,8 +22,48 @@ aAmplitude *= aEnvelope
 aNote clip aNote, 1, 1
 
 aNote *= aAmplitude * p5 / 127
+<CsoundSynthesizer>
 
-chnmix aNote, "left"
-chnmix aNote, "right"
+<CsOptions>
+
+;;-m0
+-odac
+
+</CsOptions>
+
+<CsInstruments>
+
+sr = 44100
+ksmps = 32
+nchnls = 2
+0dbfs = 1
+
+#include "engine/process.part"
+#include "engine/keyboard.part"
+#include "engine/synthesizer.part"
+
+instr out
+
+aChannel1 chnget "channel/1"
+aChannel2 chnget "channel/2"
+
+outs aChannel1, aChannel2
+
+chnclear "channel/1"
+chnclear "channel/2"
+
+endin
+
+schedule "out", 0, -1
+
+</CsInstruments>
+
+<CsScore>
+</CsScore>
+
+</CsoundSynthesizer>
+
+SChannel sprintf "channel/%d", p1
+chnmix aNote, SChannel
 
 endin
