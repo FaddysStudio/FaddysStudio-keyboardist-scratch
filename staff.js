@@ -1,20 +1,33 @@
-import faddys from './faddys.js';
+export default class Staff extends Array {
 
-export default new class Staff extends Array {
-
-constructor ( reference = 60, direction = 1 ) {
+constructor ( { maqam, reference = 60, key = 0 } ) {
 
 super ();
 
 const staff = this;
 
-staff .reference = reference;
+Object .assign ( staff, {
 
-if ( direction > 0 )
+maqam,
+reference: parseFloat ( reference ) || 60,
+key: ( key = parseInt ( key ) ) >= 0 && key < 10 ? key : 0,
+path: 0
+
+} );
+
+if ( staff .key < 9 )
 staff .push ();
 
-else if ( direction < 0 )
+staff .key = key;
+staff .path = 0;
+
+if ( staff .key > 0 ) {
+
+staff .shift ();
+staff .reference = reference;
 staff .unshift ();
+
+}
 
 }
 
@@ -22,14 +35,17 @@ push () {
 
 const staff = this;
 
-if ( staff .length === 10 )
+if ( staff .key > 9 )
 return staff .length;
 
 super .push ( staff .reference );
 
-console .log ( staff .reference );
+const { maqam } = staff;
 
-staff .reference += faddys [ ( staff .length - 1 ) % faddys .length ] .length;
+staff .key++;
+staff .path++;
+
+staff .reference += maqam [ ( staff .path - 1 ) % maqam .length ] .length;
 
 return staff .push ();
 
@@ -39,12 +55,17 @@ unshift () {
 
 const staff = this;
 
-if ( staff .length === 10 )
+if ( staff .key < 0 )
 return staff .length;
 
 super .unshift ( staff .reference );
 
-staff .reference -= faddys [ faddys .length - ( ( staff .length % faddys .length ) || faddys .length ) ] .length;
+const { maqam } = staff;
+
+staff .key--;
+staff .path++;
+
+staff .reference -= maqam [ maqam .length - ( ( staff .path % maqam .length ) || maqam .length ) ] .length;
 
 return staff .unshift ();
 

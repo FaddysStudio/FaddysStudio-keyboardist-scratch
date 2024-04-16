@@ -1,30 +1,33 @@
 import Scenarist from '@faddys/scenarist';
-import { writeFile } from 'node:fs/promises';
+import command from '@faddys/command';
+import Keyboard from './keyboard.js';
 
-export default await Scenarist ( new class Sequencer {
+import { createInterface, emitKeypressEvents } from 'node:readline';
+import { stdin as input, stdout as output } from 'node:process';
 
-constructor () {
+export default await Scenarist ( new class Sequencer extends Keyboard {
 
-const [ response, code ] = process .argv .slice ( 2 );
-const key = String .fromCharCode ( parseInt ( code ) );
+$_producer ( $ ) {
 
-Object .assign ( this, { response, key } );
+input .setRawMode ( true );
 
-}
+emitKeypressEvents ( input );
 
-async $_producer ( $ ) {
+this .processor = $;
+
+input .on ( 'keypress', async ( _, { sequence } ) => {
 
 try {
 
-const { resolution } = await $ ( this .key );
+const { resolution } = await this .processor ( sequence );
 
-await writeFile ( this .response, resolution );
+console .log ( resolution );
 
-} catch ( _ ) {
+} catch ( _ ) {}
 
-process .exitCode = -1;
+} );
 
-}
+process .on ( 'exit', code => console .log ( '#exit', code ) );
 
 }
 
@@ -33,8 +36,19 @@ $_director ( $, key ) {
 if ( isNaN ( key = parseInt ( key ) ) || key < 1 || key > 9 )
 throw -1;
 
-return 'i "synthesizer" 0 1 69 100';
+return 'i "synthesizer" 0 1 ${ this .staff [ key ] } 100';
 
 }
+
+clef = {
+
+treble: [ 'E', 4 ],
+alto: [ 'F', 3 ],
+tenor: [ 'D', 3 ],
+bass: [ 'G', 2 ]
+
+}
+
+$q () { process .exit () }
 
 } );
