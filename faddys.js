@@ -2,12 +2,13 @@ import Maqam from './maqam.js';
 
 export default new Maqam (
 
-1.25,
-.5,
-1,
-1,
-.5,
-1.25,
-.5
+2.25,
+.75,
+2,
+
+2.25,
+.75,
+3.25,
+.75
 
 );

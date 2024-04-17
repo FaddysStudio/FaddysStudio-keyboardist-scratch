@@ -15,18 +15,17 @@ nchnls = 2
 0dbfs = 1
 
 #include "engine/process.part"
-#include "engine/keyboard.part"
 #include "engine/synthesizer.part"
 
 instr out
 
-aLeft chnget "left"
-aRight chnget "right"
+aChannel1 chnget "channel/1"
+aChannel2 chnget "channel/2"
 
-outs aLeft, aRight
+outs aChannel1, aChannel2
 
-chnclear "left"
-chnclear "right"
+chnclear "channel/1"
+chnclear "channel/2"
 
 endin
 
