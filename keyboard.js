@@ -44,13 +44,7 @@ delay = 500
 $_producer ( $ ) {
 
 const keyboard = this;
-const release = () => {
-
-[ 1, 2 ] .forEach ( channel => keyboard .score ( `i -${ channel } 0 0` ) );
-
-delete keyboard .status;
-
-};
+const release = () => delete keyboard .status;
 
 for ( let index = 0; index < keyboard .length; index++ )
 Object .defineProperty ( keyboard, '$' + index, {
@@ -58,7 +52,7 @@ Object .defineProperty ( keyboard, '$' + index, {
 configurable: true,
 get () {
 
-[ 1, 2 ] .forEach ( channel => keyboard .score ( `i ${ channel } 0 -1 ${ keyboard [ index ] } 100 ${ 1/64 } ${ 1/64 } ${ 1/4 }` ) );
+[ 1, 2 ] .forEach ( channel => keyboard .score ( `i ${ channel } 0 1 ${ keyboard [ index ] } 100 ${ 1/64 } ${ 1/64 } ${ 1/4 }` ) );
 
 if ( ! keyboard .status )
 return keyboard .status = setTimeout ( release, keyboard .delay );
