@@ -1,7 +1,7 @@
 import Scenarist from '@faddys/scenarist';
 import command from '@faddys/command';
 import maqam from './faddys.js';
-import Staff from './staff.js';
+import Keyboard from './keyboard.js';
 
 import { createInterface, emitKeypressEvents } from 'node:readline';
 import { stdin as input, stdout as output } from 'node:process';
@@ -26,31 +26,15 @@ async $_processor ( $, sequence ) {
 
 try {
 
-const { resolution } = await $ ( sequence );
+await $ ( sequence );
 
-console .log ( resolution );
-
-} catch ( _ ) {}
-
-}
-
-[ '$\x03' ] () {
-
-input .destroy ();
-
-return 'Yallah, bye bye!';
+} catch ( _ ) {
+console .error ( _ );
 
 }
 
-$_director = new Staff ( { maqam } )
-
-clef = {
-
-treble: [ 'E', 4 ],
-alto: [ 'F', 3 ],
-tenor: [ 'D', 3 ],
-bass: [ 'G', 2 ]
-
 }
+
+$_director = new Keyboard ( { maqam } )
 
 } );

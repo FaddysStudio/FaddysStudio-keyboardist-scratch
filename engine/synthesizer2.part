@@ -1,0 +1,107 @@
+opcode o_control, 0, Siiio
+
+SController, iSustainValue, iAttackValue, iPadding, iPaddingCent xin
+
+iChannel init int ( p1 ) % 10
+
+SControl sprintf "%d/%s/control", iChannel, SController
+iInitialValue chnget SControl
+
+iAttackTime init p ( 6 )
+iDecayTime init p ( 7 )
+iReleaseTime init p ( 8 )
+
+aSignal linsegr iInitialValue, iAttackTime, iAttackValue, iDecayTime, iSustainValue, iReleaseTime, 0
+
+aSignalAnalogizer jspline 1/4, 0, 4
+aSignalAnalogizer += 3/4
+aSignalAnalogizerEnvelope linseg 0, iAttackTime, 1
+aSignalAnalogizer *= aSignalAnalogizerEnvelope
+
+if iPaddingCent == 0 then
+
+prints "regular\n"
+
+aSignal *= iPadding * aSignalAnalogizer
+
+else
+
+prints "cented\n"
+
+aSignal *= cent ( iPadding * aSignalAnalogizer )
+
+endif
+
+SSignal sprintf "%d/%s", iChannel, SController
+chnset aSignal, SSignal
+chnset k ( aSignal ), SControl
+
+prints "%s %s\n", SSignal, SControl
+
+endop
+
+opcode o_controller, a, S
+
+SController xin
+
+iChannel init int ( p1 ) % 10
+
+SSignal sprintf "%d/%s", iChannel, SController
+aSignal chnget SSignal
+
+xout aSignal
+
+endop
+
+instr 1, 2
+
+iChannel init p1
+
+iNote init p4
+iFrequency init cpsmidinn ( iNote )
+
+o_control "frequency", iFrequency, iFrequency * cent ( 100 ), 75, 1
+
+
+iAmplitude init p5 / 127
+
+o_control "amplitude", iAmplitude, iAmplitude*2, iAmplitude/2
+
+SClip sprintf "%d/clip", iChannel
+aClip jspline 1, 0, 4
+chnset aClip, SClip
+
+SSkew sprintf "%d/skew", iChannel
+aSkew jspline 1, 0, 4
+chnset aSkew, SSkew
+
+endin
+
+instr 11, 12
+
+iChannel init int ( p1 ) % 10
+
+aFrequency o_controller "frequency"
+
+SClip sprintf "%d/clip", iChannel
+aClip chnget SClip
+
+SSkew sprintf "%d/skew", iChannel
+aSkew chnget SSkew
+
+aNote squinewave aFrequency, aClip, aSkew, 0
+
+aNote clip aNote, 1, 1
+
+SAmplitude sprintf "%d/amplitude", iChannel
+aAmplitude chnget SAmplitude
+
+aNote *= aAmplitude
+
+SChannel sprintf "channel/%d", iChannel
+chnmix aNote * aAmplitude, SChannel
+
+endin
+
+schedule 11, 0, -1
+schedule 12, 0, -1

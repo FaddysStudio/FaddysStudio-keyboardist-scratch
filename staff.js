@@ -1,4 +1,8 @@
+const $$ = Symbol .for;
+
 export default class Staff extends Array {
+
+keyboard = {}
 
 constructor ( { maqam, reference = 60, key = 0 } ) {
 
@@ -29,12 +33,34 @@ staff .unshift ();
 
 }
 
+}
+
+async $_producer ( _, { stamp, pilot: $ } ) {
+
+const { resolution } = await $ ( stamp );
+
+const staff = this;
+
 for ( let index = 0; index < staff .length; index++ )
-Object .assign ( staff, {
+Object .defineProperty ( staff, '$' + index, {
 
-get [ '$' + index ] () {
+configurable: true,
+get () {
 
-return [ 1, 2 ] .map ( channel => `i ${ channel } 0 1 ${ staff [ index ] } 120` ) .join ( '\n' );
+if ( staff .keyboard [ index ] instanceof Timeout ) {
+
+clearTimeout ( staff .keyboard [ index ] );
+setTimeout ( staff .release, staff .
+
+}
+
+[ 1, 2 ] .forEach ( channel => $ ( $$ ( 'score' ), `i ${ channel } 0 -1 ${ staff [ index ] } 120` ) );
+
+await ( staff .keyboard [ index ] = setTimeout ( 100, true ) );
+
+[ 1, 2 ] .forEach ( channel => $ ( $$ ( 'score' ), `i -${ channel } 0 0` ) );
+
+delete staff .keyboard [ index ];
 
 }
 

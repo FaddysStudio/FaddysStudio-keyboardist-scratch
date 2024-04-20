@@ -15,7 +15,7 @@ nchnls = 2
 0dbfs = 1
 
 #include "engine/process.part"
-#include "engine/synthesizer.part"
+#include "engine/synthesizer2.part"
 
 instr out
 
