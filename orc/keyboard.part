@@ -1,17 +1,29 @@
+opcode o_key, 0, SS
+
+SKey, SInstrument xin
+
+iInstrument nstrnum SInstrument
+SIndex sprintf "key/%s", SKey
+
+chnset iInstrument, SIndex
+
+endop
+
 instr keyboard
 
 kASCII, kPressed sense
 
 if kPressed == 1 then
 
-SAction sprintfk "action/%c", kASCII
-SInstrument chnget SAction
+SKey sprintfk "key/%c", kASCII
+kInstrument chnget SKey
 
-kLength strlenk SInstrument
+if kInstrument > 0 then
+kSeconds date
+SInstance sprintfk ".%d", kSeconds
+kInstance strtodk SInstance
 
-if kLength > 0 then
-
-SScore sprintfk {{ i "%s" 0 0 }}, SInstrument
+SScore sprintfk {{ i %f 0 0 }}, kInstrument + kInstance
 
 scoreline SScore, 1
 

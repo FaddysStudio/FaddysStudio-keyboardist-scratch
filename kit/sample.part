@@ -1,0 +1,62 @@
+opcode o_layer, 0, So
+
+SPartial, iLevel xin
+
+iPartial nstrnum SPartial
+iPartial += frac ( p ( 1 ) )
+
+schedule iPartial, 0, p ( 3 ), iLevel
+
+if iLevel > 0 then
+
+o_layer SPartial, iLevel - 1
+
+endif
+
+endop
+
+instr sample
+
+o_layer "synthesizer", 4
+
+endin
+
+instr synthesizer
+
+iLevel = p4
+iNote = ( frac ( p1 ) * 1000 ) % 128
+
+if iLevel > 0 then
+
+iNote = 24 + ( iLevel * 12 ) + iNote % 12
+
+endif
+
+iFrequency = cpsmidinn ( iNote )
+
+aFrequency init iFrequency
+aClip jspline 1, 0, 4
+aSkew jspline 1, 0, 4
+
+aNote squinewave aFrequency, aClip, aSkew, 0
+
+aNote clip aNote, 1, 1
+
+if iLevel > 0 then
+
+aNote tonex aNote, aFrequency, iLevel
+aNote  *= iLevel/20
+
+else
+
+aNote tone aNote, aFrequency
+
+endif
+
+aAmplitude linseg 0, 1/1024, 1, p3 - 1/1024, 0
+aNote *= aAmplitude
+
+chnmix aNote, "left"
+chnmix aNote, "right"
+
+endin

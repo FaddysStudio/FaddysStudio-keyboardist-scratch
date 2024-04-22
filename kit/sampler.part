@@ -1,0 +1,40 @@
+o_key "\n", "sampler"
+
+instr sampler
+
+iInstrument nstrnum "sample"
+
+giFirst = 36
+iLast = 96
+iCount = iLast - giFirst
+
+iNote init giFirst
+iDelay init 0
+iDuration init 1
+iRest = iDuration / 4
+
+p3 = ( iCount + iRest ) * iDuration
+
+while iNote <= iLast do
+
+iInstance = iNote / 1000
+
+schedule iInstrument + iInstance, iDelay, iDuration
+
+iNote += 1
+iDelay += iDuration + iRest
+
+od
+
+aLeft chnget "left"
+aRight chnget "right"
+
+aLeft clip aLeft, 1, 1
+aRight clip aRight, 1, 1
+
+outs aLeft/5, aRight/5
+
+chnclear "left"
+chnclear "right"
+
+endin

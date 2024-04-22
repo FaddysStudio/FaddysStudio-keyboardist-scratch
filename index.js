@@ -5,6 +5,7 @@ import { argv, cwd } from 'node:process';
 import { readdir, mkdir } from 'node:fs/promises';
 import { scenario as $sequence } from '@faddys/keyboardist/sequence';
 import { scenario as $kit } from '@faddys/keyboardist/kit';
+import { scenario as $staff } from '@faddys/keyboardist/staff';
 
 const $$ = Symbol .for;
 
@@ -42,6 +43,7 @@ return $ ( $$ ( 'info' ), "Project has been initialized successfully" );
 
 $sequence,
 $kit,
+$staff,
 
 $_info ( $, ... message ) { console .log ( "#keyboardist", "#info", ... message ) }
 

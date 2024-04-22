@@ -1,0 +1,14 @@
+#ifdef sample
+
+SWorkingDirectory chnget "directory/work"
+SSample strcat SWorkingDirectory, "/$sample"
+
+SScore sprintf {{
+
+i "note_insert" 0 0 1 "%s"
+
+}}, SSample
+
+scoreline_i SScore
+
+#end

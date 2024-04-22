@@ -7,8 +7,10 @@
     ".": "./index.js",
     "./command": "./command.js",
     "./environment": "./environment.js",
+    "./processor": "./processor.js",
     "./sequence": "./sequence/index.js",
-    "./kit": "./kit/index.js"
+    "./kit": "./kit/index.js",
+    "./staff": "./staff/index.js"
   },
   "bin": {
     "keyboardist": "./index.js",

@@ -1,7 +1,11 @@
 import { parse } from 'node:path';
 
-export const engine = parse ( new URL ( import .meta .url ) .pathname ) .dir;
-export const directory = '~/.keyboardist';
+const environment = {};
 
-export const kit = directory + '/kit';
-export const sequence = directory + '/sequence';
+export default environment;
+
+export const engine = environment .engine = parse ( new URL ( import .meta .url ) .pathname ) .dir;
+export const directory = environment .directory = '~/.keyboardist';
+
+export const kit = environment .kit = directory + '/kit';
+export const sequence = environment .sequence = directory + '/sequence';
