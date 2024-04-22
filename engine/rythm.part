@@ -1,0 +1,5 @@
+instr rythm
+
+chnset p3, "rythm"
+
+endin

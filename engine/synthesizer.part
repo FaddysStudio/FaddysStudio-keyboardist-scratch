@@ -1,0 +1,59 @@
+instr 1, 2
+
+iTied tival
+iDuration init abs ( p3 )
+iNote init p4
+iFrequency init cpsmidinn ( iNote )
+
+SFrequency sprintf "%d/frequency", p1
+SAmplitude sprintf "%d/amplitude", p1
+
+iAmplitude init p5 / 127
+iAmplitudeInitial chnget SAmplitude
+
+tigoto Tie
+
+Initialization:
+
+iFrequencyInitial init iFrequency * cent ( -100 )
+
+igoto Performance
+
+Tie:
+
+iFrequencyInitial chnget SFrequency
+
+Performance:
+
+print iAmplitudeInitial
+
+;aAmplitude jspline .25, 0, 4
+;aAmplitude += .75
+
+aAmplitude linsegr iAmplitudeInitial, 1/64, iAmplitude, 1/64, 0
+;aAmplitude *= aEnvelope
+
+chnset k ( aAmplitude ), SAmplitude
+
+aFrequency linseg iFrequencyInitial, 1/64, iFrequency
+
+chnset k ( aFrequency ), SFrequency
+
+aDetune jspline 12.5, 0, 4
+
+aClip jspline 1, 0, 4
+aSkew jspline 1, 0, 4
+
+aNote squinewave aFrequency * cent ( aDetune ), aClip, aSkew, 0
+
+;aFilter jspline aFrequency, 0, 4
+
+;aNote tone aNote, aFilter
+
+aNote clip aNote, 1, 1
+
+SChannel sprintf "channel/%d", p1
+
+chnmix aNote * aAmplitude, SChannel
+
+endin

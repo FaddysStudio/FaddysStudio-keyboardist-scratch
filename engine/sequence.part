@@ -1,0 +1,13 @@
+instr 1, 2, 3, 4, 5, 6, 7, 8, 9
+
+iPitch init int ( p1 )
+
+SClef chnget "clef"
+SPitch sprintf "%s/%d", SClef, iPitch
+iNote chnget SPitch
+
+iRythm chnget "rythm"
+
+iInstrument chnget
+
+endin
