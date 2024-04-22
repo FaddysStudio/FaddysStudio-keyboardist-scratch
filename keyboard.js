@@ -52,7 +52,13 @@ Object .defineProperty ( keyboard, '$' + index, {
 configurable: true,
 get () {
 
-[ 1, 2 ] .forEach ( channel => keyboard .score ( `i ${ channel } 0 ${1/2} ${ keyboard [ index ] } 127 ${1/128} ${1/128} ${1/4}` ) );
+[ 1, 2 ] .forEach ( channel => keyboard .score (
+
+`i ${ channel }.1 0 ${1/32} ${ keyboard [ index ] } 127 ${1/64} ${1/64} ${1}`,
+`i ${ channel }.2 0 ${1/2} ${ keyboard [ index ] - 12 } 100 ${1/64} ${1/64} ${1/32}`,
+`i ${ channel }.3 0 ${1/2} ${ keyboard [ index ] - 36 } 127 ${1/64} ${1/64} ${1/32}`
+
+) );
 
 if ( ! keyboard .status )
 return keyboard .status = setTimeout ( release, keyboard .delay );

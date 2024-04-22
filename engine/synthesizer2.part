@@ -1,41 +1,35 @@
-opcode o_control, 0, Siiio
+opcode o_control, 0, Siiiio
 
-SController, iSustainValue, iAttackValue, iPadding, iPaddingCent xin
+SController, iSustainValue, iAttackValue, iReleaseValue, iPadding, iPaddingCent xin
 
-iChannel init int ( p1 ) % 10
+iChannel init p1 % 10
 
-SControl sprintf "%d/%s/control", iChannel, SController
+SControl sprintf "%f/%s/control", iChannel, SController
 iInitialValue chnget SControl
 
 iAttackTime init p ( 6 )
 iDecayTime init p ( 7 )
 iReleaseTime init p ( 8 )
 
-aSignal linsegr iInitialValue, iAttackTime, iAttackValue, iDecayTime, iSustainValue, iReleaseTime, 0
+aSignal linsegr iInitialValue, iAttackTime, iAttackValue, iDecayTime, iSustainValue, iReleaseTime, iReleaseValue
 
-aSignalAnalogizer jspline 1, 0, 4
-aSignalAnalogizerEnvelope linseg 0, iAttackTime, 1
-aSignalAnalogizer *= aSignalAnalogizerEnvelope
+aSignalAnalogizerAmplitude linsegr 0, iAttackTime, iPadding*2, iDecayTime, iPadding, iReleaseTime, 0
+aSignalAnalogizer jspline aSignalAnalogizerAmplitude, 10, 14
+aSignalAnalogizer += iPadding
 
 if iPaddingCent == 0 then
 
-prints "regular\n"
-
-aSignal *= iPadding * aSignalAnalogizer
+aSignal *= aSignalAnalogizer
 
 else
 
-prints "cented\n"
-
-aSignal *= cent ( iPadding * aSignalAnalogizer )
+aSignal *= cent ( aSignalAnalogizer )
 
 endif
 
-SSignal sprintf "%d/%s", iChannel, SController
+SSignal sprintf "%f/%s", iChannel, SController
 chnset aSignal, SSignal
 chnset k ( aSignal ), SControl
-
-prints "%s %s\n", SSignal, SControl
 
 endop
 
@@ -43,9 +37,9 @@ opcode o_controller, a, S
 
 SController xin
 
-iChannel init int ( p1 ) % 10
+iChannel init p1 % 10
 
-SSignal sprintf "%d/%s", iChannel, SController
+SSignal sprintf "%f/%s", iChannel, SController
 aSignal chnget SSignal
 
 xout aSignal
@@ -54,20 +48,18 @@ endop
 
 instr 1, 2
 
-iChannel init p1
-
 iNote init p4
 iFrequency init cpsmidinn ( iNote )
 
-o_control "frequency", iFrequency, iFrequency * cent ( 100 ), 20, 1
+o_control "frequency", iFrequency, iFrequency * cent ( 75 ), iFrequency * cent ( 75 ), 10, 1
 
 iAmplitude init p5 / 127
 
-o_control "amplitude", iAmplitude/32, iAmplitude/2, iAmplitude/2
+o_control "amplitude", iAmplitude/32, iAmplitude/8, 0, iAmplitude
 
-o_control "clip", 1, 1, 1
+;o_control "clip", 1, 1, 0, 1
 
-o_control "skew", 1, 0, 1
+;o_control "skew", 1, 0, 0, 1
 
 endin
 
@@ -77,16 +69,19 @@ iChannel init int ( p1 ) % 10
 
 aFrequency o_controller "frequency"
 
-aClip o_controller "clip"
+aClip jspline .5, 0, 4
+aClip += .5
+; o_controller "clip"
 
-aSkew o_controller "skew"
+aSkew jspline .5, 0, 4
+aSkew += .5
+; o_controller "skew"
 
 aNote squinewave aFrequency, aClip, aSkew, 0
 
 aNote clip aNote, 1, 1
 
 aAmplitude o_controller "amplitude"
-aAmplitude += .05
 
 SChannel sprintf "channel/%d", iChannel
 
@@ -94,5 +89,11 @@ chnmix aNote * aAmplitude, SChannel
 
 endin
 
-schedule 11, 0, -1
-schedule 12, 0, -1
+schedule 11.1, 0, -1
+schedule 12.1, 0, -1
+
+schedule 11.2, 0, -1
+schedule 12.2, 0, -1
+
+schedule 11.3, 0, -1
+schedule 12.3, 0, -1
